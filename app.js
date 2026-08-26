@@ -138,10 +138,15 @@ ui.scan.addEventListener('click', async () => {
     );
 
     for (const plan of plans) {
-      if (plan.status === STATUS.skippedUnsupported) log(`SKIP (unsupported): ${plan.relativePath}`);
-      else if (plan.status === STATUS.skippedMissing) log(`SKIP ${plan.relativePath} — ${plan.notes}`);
-      else if (plan.status === STATUS.alreadyCorrect) log(`OK   (already correct): ${plan.relativePath}`);
-      else log(`PLAN ${plan.relativePath} -> ${plan.proposedName}`);
+      switch (plan.status) {
+        case STATUS.skippedUnsupported: log(`SKIP (unsupported): ${plan.relativePath}`); break;
+        case STATUS.skippedMissing:     log(`SKIP ${plan.relativePath} — ${plan.notes}`); break;
+        case STATUS.alreadyCorrect:     log(`OK   (already correct): ${plan.relativePath}`); break;
+        // Without its own branch this fell through to PLAN and logged
+        // "-> undefined", hiding the very error it was gathered to report.
+        case STATUS.unreadable:         log(`UNREADABLE ${plan.relativePath} — ${plan.notes}`); break;
+        default:                        log(`PLAN ${plan.relativePath} -> ${plan.proposedName}`);
+      }
     }
 
     render();
