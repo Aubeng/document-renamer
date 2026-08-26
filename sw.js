@@ -1,6 +1,6 @@
 // Offline app shell. Bump CACHE when any listed file changes, otherwise the
 // installed app keeps serving the old copy.
-const CACHE = 'document-renamer-v3';
+const CACHE = 'document-renamer-v4';
 
 const SHELL = [
   '.',
