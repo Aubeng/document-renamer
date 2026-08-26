@@ -87,18 +87,19 @@
 </div>
 
 <div class="card">
-  <div class="strong">Program and partner</div>
+  <div class="strong">Fallback program and partner</div>
   <p class="hint">
-    What you type here is used for every file in the scan. Leave both blank to read them from each
-    <code>Program-Partner</code> subfolder name instead.
+    Program and partner are read from each file's own <code>Program-Partner</code> folder, so one root
+    can hold many projects and each file gets its own. These boxes only catch files whose folder name
+    doesn't parse.
   </p>
   <div class="fields">
     <div>
-      <label for="program">Program acronym</label>
+      <label for="program">Fallback program acronym</label>
       <input type="text" id="program" placeholder="e.g. GROW, MFAP, AJIRA" autocomplete="off">
     </div>
     <div>
-      <label for="partner">Lead partner name</label>
+      <label for="partner">Fallback lead partner name</label>
       <input type="text" id="partner" placeholder="e.g. Generation You, eMobilis" autocomplete="off">
     </div>
     <div>

@@ -87,7 +87,8 @@ function render() {
   ui.counts.textContent =
     `${plans.length} file(s) — ${count(STATUS.pending)} to rename, ` +
     `${count(STATUS.alreadyCorrect)} already correct, ` +
-    `${count(STATUS.skippedMissing) + count(STATUS.skippedUnsupported)} skipped`;
+    `${count(STATUS.skippedMissing) + count(STATUS.skippedUnsupported)} skipped` +
+    (count(STATUS.unreadable) ? `, ${count(STATUS.unreadable)} unreadable` : '');
 }
 
 // -------------------------------------------------------------- actions --
@@ -110,6 +111,19 @@ ui.scan.addEventListener('click', async () => {
   setBusy(true);
   ui.statusText.textContent = 'Scanning…';
   try {
+    // A handle restored from a previous session can outlive its permission,
+    // and on managed devices the folder itself may no longer be reachable.
+    // Check before walking so the failure names itself instead of surfacing
+    // as a bare "not found" halfway through.
+    let permission = await directoryHandle.queryPermission({ mode: 'readwrite' });
+    if (permission !== 'granted') {
+      log('Permission not granted yet — asking again.');
+      permission = await directoryHandle.requestPermission({ mode: 'readwrite' });
+    }
+    if (permission !== 'granted') {
+      throw new Error('Read/write permission for that folder was refused.');
+    }
+
     plans = await buildPlan(
       directoryHandle,
       {
@@ -134,8 +148,15 @@ ui.scan.addEventListener('click', async () => {
     const pending = plans.filter((p) => p.status === STATUS.pending).length;
     ui.statusText.textContent = `Found ${plans.length} file(s) — ${pending} to rename.`;
   } catch (error) {
-    ui.statusText.textContent = `Scan failed: ${error.message}`;
-    log(`ERROR during scan — ${error.message}`);
+    const detail = `${error?.name ?? 'Error'}: ${error?.message ?? error}`;
+    ui.statusText.textContent = `Scan failed — ${detail}`;
+    log(`ERROR during scan — ${detail}`);
+    if (error?.name === 'NotFoundError') {
+      log('The folder could be reached but not read. On a managed device this is usually '
+        + 'OneDrive/SharePoint online-only files: right-click the folder, choose "Always keep '
+        + 'on this device", wait for the download, then scan again. A folder on a mapped '
+        + 'network drive can behave the same way — copy it locally first.');
+    }
   } finally {
     setBusy(false);
   }

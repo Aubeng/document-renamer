@@ -36,9 +36,10 @@ the folder picker works.
 
 1. **Pick folder…** and grant read/write access. The browser asks every
    session — that permission prompt is the price of not installing anything.
-2. Type the **Program acronym** and **Lead partner name**. These apply to every
-   file in the scan. Leave both blank to read them from each `Program-Partner`
-   subfolder name instead.
+2. Leave the **fallback** boxes alone unless you need them. Program and partner
+   are read from each file's own `Program-Partner` folder, so one root holding
+   many project folders renames correctly in a single pass. The boxes only
+   catch files whose folder name doesn't parse.
 3. **Scan / Preview** — nothing on disk changes. Check the proposed names.
 4. **Rename files** — commits. Existing files are never overwritten; a
    colliding name gets ` (2)`, ` (3)`, … appended.
@@ -68,6 +69,19 @@ one place and change it in the other**, or the two will drift.
 - **Dates are taken literally.** The calendar digits written in the document are
   used as-is, with no timezone conversion — matching the desktop app's PDF
   behaviour, and identical for Office files in a UTC+0 timezone.
+
+## If scanning fails on a managed device
+
+A folder that opens fine on a personal machine can fail on a locked-down one.
+The scan no longer aborts on the first bad file — unreadable files are listed
+individually with the browser's own error name, which tells you which case it is:
+
+| Error shown | Cause | Fix |
+|-------------|-------|-----|
+| `NotFoundError` | The file is listed but can't be opened — almost always a OneDrive/SharePoint **online-only placeholder**, or a mapped network drive | Right-click the folder → **Always keep on this device**, wait for the download, scan again. For a network drive, copy it local first. |
+| `NotAllowedError` | Permission lapsed or was refused | Press **Pick folder…** and allow "Save changes" again |
+| `NoModificationAllowedError` | File locked, read-only, or blocked by Controlled Folder Access | Close the file; ask IT about Controlled Folder Access |
+| `SecurityError` | Browser policy on that device | Ask IT — the File System Access API may be restricted by policy |
 
 ## Known limits
 
