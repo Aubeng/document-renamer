@@ -70,6 +70,25 @@ one place and change it in the other**, or the two will drift.
   used as-is, with no timezone conversion — matching the desktop app's PDF
   behaviour, and identical for Office files in a UTC+0 timezone.
 
+## Where the date comes from
+
+Tried in this order; the first one that yields a date wins, and anything below
+the first is flagged in the preview's Details column so a weak date never looks
+like a strong one.
+
+| # | Source | Why it ranks here |
+|---|--------|-------------------|
+| 1 | The document's **own internal date** — Office core properties, or a PDF's Info dictionary / XMP packet | Says when the document was actually written |
+| 2 | A **date already in the file name** (`..._22-07-07_Final.xlsx`) | Written by an earlier run, so it *is* an internal date, preserved. Ranked above the system date deliberately: otherwise every sync or antivirus touch would change the system date, produce a new name, and rename the file again — drifting further from the truth on every scan. Here, a correctly-named file stays put forever |
+| 3 | The **Windows modified date** | Last resort. Reflects the last time the file was touched on disk — a copy, a sync, a virus scan — not when it was written. Treat these rows with suspicion in the preview |
+
+Source 2 also rescues files whose path exceeds 260 characters: they can be
+listed but not opened, so the name is the only readable thing about them.
+
+**The desktop app has only source 1.** It skips anything without an internal
+date. The two implementations diverge here on purpose — the PWA meets messier
+real-world folders.
+
 ## If scanning fails on a managed device
 
 A folder that opens fine on a personal machine can fail on a locked-down one.
@@ -85,9 +104,12 @@ individually with the browser's own error name, which tells you which case it is
 
 ## Known limits
 
-- A PDF that hides its Info dictionary in a compressed object stream *and*
-  exceeds the stream-scan caps reports no date, so the file is skipped rather
-  than misnamed. Same outcome as the desktop app on a file it can't read.
-- Encrypted or password-protected documents are skipped.
+- A PDF with no Info dictionary, no XMP packet and no date in its name falls
+  back to the Windows modified date, which may be years off. Flagged in the
+  preview.
+- Encrypted or password-protected documents fall through to the same fallbacks.
+- Windows' 260-character path limit is real: a file whose full path exceeds it
+  can be renamed (the date comes from its name) but the rename itself may still
+  fail. The fix is to shorten the *folder* name.
 - The folder permission can't be made permanent; the last folder is remembered,
   but access must be re-granted each session.
