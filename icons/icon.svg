@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Document Renamer">
+  <rect width="512" height="512" rx="96" fill="#8b0000"/>
+  <path d="M160 96h136l88 88v232a24 24 0 0 1-24 24H160a24 24 0 0 1-24-24V120a24 24 0 0 1 24-24z" fill="#fff"/>
+  <path d="M296 96l88 88h-72a16 16 0 0 1-16-16V96z" fill="#e67e22"/>
+  <rect x="176" y="248" width="160" height="20" rx="10" fill="#e67e22"/>
+  <rect x="176" y="300" width="160" height="20" rx="10" fill="#d8d8dc"/>
+  <rect x="176" y="352" width="104" height="20" rx="10" fill="#d8d8dc"/>
+</svg>
