@@ -3,6 +3,22 @@
 Same tool as the WinUI app, as an installable web app. It exists because the
 target device blocks unsigned executables but runs PWAs happily.
 
+Implements the Foundation's **File Naming Conventions: Guidance and Business
+Value** (Content Management + Legal & Compliance, 2026):
+
+```
+Programmatic      DocumentType-LeadPartnerName-ProgramAcronym-YY-MM-DD-Stage
+                  Proposal-Jobberman-MFAP-26-02-10-Final.docx
+
+Non-programmatic  Document Title - YYYY-MM-DD - Stage
+                  PST Extended Planning Workshop Notes - 2026-04-02 - Draft.docx
+```
+
+A file is programmatic when its folder yields both a program and a partner;
+otherwise it takes the non-programmatic shape. Note the deliberate differences
+the guidance specifies: no spaces around the hyphen and a two-digit year for
+programmatic names, spaces and a four-digit year for the rest.
+
 Everything happens on the device: the page never uploads a file, never calls a
 server, and works with the network off. Hosting it publicly exposes the code,
 not your documents.

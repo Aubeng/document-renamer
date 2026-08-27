@@ -69,7 +69,7 @@
 </head>
 <body>
 
-<h1>Document Renamer <span>renames documents to DocumentType_Partner_Program_YY-MM-DD_Stage</span></h1>
+<h1>Document Renamer <span>Foundation file naming conventions, 2026</span></h1>
 
 <div id="unsupported" class="banner" hidden>
   This browser can't open a folder for editing. Use <strong>Edge</strong> or <strong>Chrome</strong> on the
@@ -89,9 +89,11 @@
 <div class="card">
   <div class="strong">Fallback program and partner</div>
   <p class="hint">
-    Program and partner are read from each file's own <code>Program-Partner</code> folder, so one root
-    can hold many projects and each file gets its own. These boxes only catch files whose folder name
-    doesn't parse.
+    Programmatic files are named <code>DocumentType-Partner-Program-YY-MM-DD-Stage</code>, with program
+    and partner read from each file's own <code>Program-Partner</code> folder — so one root can hold many
+    projects and each file gets its own. A file with no such folder is treated as non-programmatic and
+    named <code>Document Title - YYYY-MM-DD - Stage</code> instead. These boxes only supply a program and
+    partner for files whose folder name doesn't parse.
   </p>
   <div class="fields">
     <div>
