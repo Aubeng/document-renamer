@@ -98,6 +98,15 @@ like a strong one.
 | 2 | A **date already in the file name** (`..._22-07-07_Final.xlsx`) | Written by an earlier run, so it *is* an internal date, preserved. Ranked above the system date deliberately: otherwise every sync or antivirus touch would change the system date, produce a new name, and rename the file again — drifting further from the truth on every scan. Here, a correctly-named file stays put forever |
 | 3 | The **Windows modified date** | Last resort. Reflects the last time the file was touched on disk — a copy, a sync, a virus scan — not when it was written. Treat these rows with suspicion in the preview |
 
+Legacy Office files (`.doc` `.dot` `.xls` `.xlt` `.ppt` `.pot`) are renamed but have
+no source 1: their date lives in an OLE property stream this reader does not
+parse, so they always land on source 2 or 3.
+
+One ambiguity worth knowing about source 2: `18-08-26` in a file name is read as
+**yy-MM-dd** — correct for a name this tool wrote, but a human-written
+`DD-MM-YY` would be misread. Every such row says "date read from the existing
+file name" in the preview, so it is visible before you commit.
+
 Source 2 also rescues files whose path exceeds 260 characters: they can be
 listed but not opened, so the name is the only readable thing about them.
 
